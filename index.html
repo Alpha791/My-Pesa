@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Pesa Yangu — Kenya's M-Pesa Budget Tracker. Track income, expenses and savings. Free to start."/>
+<title>Pesa Yangu | Kenya M-Pesa Budget Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#060e06;color:#edfaed;font-family:'Plus Jakarta Sans',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:100;background:rgba(6,14,6,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,166,81,.12);height:64px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+.nlogo{width:36px;height:36px;background:#00a651;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 16px rgba(0,166,81,.4);flex-shrink:0;}
+.nbrand{font-size:17px;font-weight:900;color:#edfaed;letter-spacing:-.02em;}
+.nbrand span{color:#00c461;}
+.nlinks{display:flex;gap:24px;margin-left:20px;}
+.nlinks a{color:#5a8a5a;font-size:14px;font-weight:600;text-decoration:none;transition:color .2s;}
+.nlinks a:hover{color:#edfaed;}
+.nright{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.nghost{padding:8px 18px;border:1px solid rgba(0,166,81,.25);border-radius:8px;color:#5a8a5a;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;}
+.nghost:hover{border-color:#00a651;color:#00c461;}
+.nprime{padding:9px 20px;background:#00a651;border-radius:8px;color:#fff;font-size:13px;font-weight:800;text-decoration:none;transition:all .2s;}
+.nprime:hover{background:#00c461;}
+@media(max-width:620px){.nlinks{display:none;}.nbrand{font-size:15px;}}
+.hero{min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px 60px;}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,166,81,.1);border:1px solid rgba(0,166,81,.25);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:700;color:#00c461;letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px;}
+.pulse{width:7px;height:7px;background:#00c461;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero h1{font-size:clamp(36px,7vw,74px);font-weight:900;letter-spacing:-.03em;line-height:1.02;margin-bottom:22px;}
+.hero h1 .l1{display:block;color:#edfaed;}
+.hero h1 .l2{display:block;color:#00c461;}
+.hsub{font-size:clamp(15px,2.5vw,18px);color:#5a8a5a;max-width:500px;line-height:1.72;margin-bottom:38px;}
+.hbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.hbtn1{padding:16px 34px;background:#00a651;border-radius:12px;color:#fff;font-size:16px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 36px rgba(0,166,81,.35);transition:all .25s;}
+.hbtn1:hover{background:#00c461;transform:translateY(-2px);}
+.hbtn2{padding:16px 30px;border:1.5px solid rgba(255,255,255,.1);border-radius:12px;color:#5a8a5a;font-size:15px;font-weight:700;text-decoration:none;transition:all .25s;}
+.hbtn2:hover{border-color:#00a651;color:#edfaed;}
+.trow{margin-top:48px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.tpill{background:#0d1a0d;border:1px solid rgba(0,166,81,.15);border-radius:100px;padding:7px 15px;font-size:12px;font-weight:600;color:#5a8a5a;display:flex;align-items:center;gap:6px;}
+.mwrap{max-width:940px;margin:0 auto;padding:0 20px 80px;}
+.mbox{background:#111a11;border:1px solid rgba(0,166,81,.15);border-radius:20px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6);}
+.mtop{background:#0d160d;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.05);}
+.mdots{display:flex;gap:6px;}
+.mdots span{width:11px;height:11px;border-radius:50%;}
+.murl{flex:1;background:rgba(255,255,255,.05);border-radius:6px;padding:5px 12px;font-size:11.5px;color:#3a5a3a;font-family:monospace;margin:0 12px;}
+.mbody{padding:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+@media(max-width:560px){.mbody{grid-template-columns:1fr;}}
+.mc{background:#0d160d;border:1px solid rgba(0,166,81,.1);border-radius:12px;padding:16px;}
+.mlb{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#3a5a3a;margin-bottom:8px;}
+.mv{font-size:22px;font-weight:800;font-family:'DM Mono',monospace;letter-spacing:-.02em;}
+.mv.g{color:#00c461;}.mv.r{color:#f87171;}.mv.a{color:#fbbf24;}
+.mbars{display:flex;align-items:flex-end;gap:4px;height:36px;margin-top:10px;}
+.mbar{flex:1;border-radius:3px 3px 0 0;background:#00a651;opacity:.25;}
+.mbar.hi{opacity:1;}.mbar.ri{background:#ef4444;}
+.mtxs{display:flex;flex-direction:column;gap:7px;margin-top:8px;}
+.mtx{display:flex;justify-content:space-between;font-size:11.5px;}
+.mtn{color:#3a5a3a;}
+.mta{font-weight:700;font-family:'DM Mono',monospace;}
+.mta.in{color:#00c461;}.mta.out{color:#f87171;}
+section.s{padding:80px 20px;max-width:1100px;margin:0 auto;}
+.slbl{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#00a651;margin-bottom:12px;}
+.sh2{font-size:clamp(26px,4.5vw,44px);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:12px;}
+.ssub{font-size:16px;color:#5a8a5a;max-width:500px;line-height:1.7;}
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px;}
+@media(max-width:820px){.fg{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.fg{grid-template-columns:1fr;}}
+.fc{background:#0d160d;border:1px solid rgba(0,166,81,.1);border-radius:16px;padding:24px;transition:border-color .2s,transform .2s;}
+.fc:hover{border-color:rgba(0,166,81,.3);transform:translateY(-3px);}
+.fi{width:46px;height:46px;background:rgba(0,166,81,.1);border:1px solid rgba(0,166,81,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
+.ft{font-size:15px;font-weight:800;color:#edfaed;margin-bottom:8px;}
+.fd{font-size:13px;color:#5a8a5a;line-height:1.65;}
+.ftag{display:inline-block;margin-top:10px;padding:3px 9px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:100px;font-size:10px;font-weight:800;color:#fbbf24;letter-spacing:.06em;text-transform:uppercase;}
+.hiw{padding:80px 20px;background:linear-gradient(180deg,transparent,rgba(0,166,81,.03),transparent);}
+.hiw-in{max-width:900px;margin:0 auto;text-align:center;}
+.hiwg{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
+@media(max-width:600px){.hiwg{grid-template-columns:1fr;}}
+.hiwnum{width:64px;height:64px;border-radius:50%;background:#0d160d;border:2px solid #00a651;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#00c461;margin:0 auto 14px;box-shadow:0 0 20px rgba(0,166,81,.15);}
+.hiwt{font-size:16px;font-weight:800;color:#edfaed;margin-bottom:8px;}
+.hiwd{font-size:13.5px;color:#5a8a5a;line-height:1.65;}
+.ps{padding:80px 20px;}
+.pin{max-width:820px;margin:0 auto;}
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:48px;}
+@media(max-width:580px){.pg{grid-template-columns:1fr;}}
+.pc{background:#0d160d;border:1px solid rgba(0,166,81,.12);border-radius:20px;padding:30px;position:relative;}
+.pc.hot{background:linear-gradient(135deg,#0a2a0a,#0f300f);border:1.5px solid #00a651;box-shadow:0 0 40px rgba(0,166,81,.1);}
+.pbadge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#00a651;color:#fff;border-radius:100px;padding:4px 16px;font-size:11.5px;font-weight:800;white-space:nowrap;}
+.pplan{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3a5a3a;margin-bottom:12px;}
+.pamt{font-size:44px;font-weight:900;color:#edfaed;letter-spacing:-.03em;line-height:1;font-family:'DM Mono',monospace;}
+.pamt .cur{font-size:18px;font-weight:700;color:#5a8a5a;vertical-align:super;}
+.pper{font-size:13px;color:#3a5a3a;margin-top:4px;margin-bottom:20px;}
+.pdiv{height:1px;background:rgba(0,166,81,.1);margin:16px 0;}
+.pfts{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.pft{display:flex;align-items:center;gap:9px;font-size:13px;}
+.pft.y{color:#edfaed;}.pft.n{color:#3a5a3a;}
+.ptk{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.pft.y .ptk{background:rgba(0,166,81,.15);color:#00c461;}
+.pft.n .ptk{background:rgba(255,255,255,.05);color:#3a5a3a;}
+.pbtn{width:100%;padding:14px;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;border:none;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+.pbtn-f{background:rgba(255,255,255,.05);border:1.5px solid rgba(0,166,81,.2);color:#5a8a5a;}
+.pbtn-f:hover{border-color:#00a651;color:#00c461;}
+.pbtn-p{background:#00a651;color:#fff;box-shadow:0 0 24px rgba(0,166,81,.3);}
+.pbtn-p:hover{background:#00c461;transform:translateY(-1px);}
+.ts{padding:80px 20px;}
+.tin{max-width:1000px;margin:0 auto;}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+@media(max-width:680px){.tg{grid-template-columns:1fr;}}
+.tc{background:#0d160d;border:1px solid rgba(0,166,81,.1);border-radius:16px;padding:22px;}
+.stars{color:#fbbf24;font-size:13px;letter-spacing:2px;margin-bottom:10px;}
+.tq{font-size:13.5px;color:#5a8a5a;line-height:1.7;font-style:italic;margin-bottom:16px;}
+.ta{display:flex;align-items:center;gap:10px;}
+.tav{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.tan{font-size:13px;font-weight:700;color:#edfaed;}
+.tar{font-size:11px;color:#3a5a3a;}
+.fqs{padding:80px 20px;}
+.fqi{max-width:680px;margin:0 auto;}
+.fql{display:flex;flex-direction:column;gap:10px;margin-top:44px;}
+.fqitem{background:#0d160d;border:1px solid rgba(0,166,81,.1);border-radius:12px;overflow:hidden;}
+.fqq{padding:18px 20px;font-size:14px;font-weight:700;color:#edfaed;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s;font-family:'Plus Jakarta Sans',sans-serif;background:none;border:none;width:100%;text-align:left;}
+.fqq:hover{background:rgba(0,166,81,.05);}
+.fqarr{color:#3a5a3a;font-size:18px;transition:transform .3s;flex-shrink:0;}
+.fqa{padding:0 20px;font-size:13.5px;color:#5a8a5a;line-height:1.7;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;}
+.fqitem.open .fqa{max-height:200px;padding:0 20px 18px;}
+.fqitem.open .fqarr{transform:rotate(180deg);color:#00c461;}
+.ctas{padding:80px 20px;}
+.ctabox{max-width:680px;margin:0 auto;background:#0d160d;border:1px solid rgba(0,166,81,.2);border-radius:24px;padding:56px 32px;text-align:center;}
+.ctabox h2{font-size:clamp(24px,4vw,40px);font-weight:900;letter-spacing:-.02em;margin-bottom:14px;}
+.ctabox p{font-size:15px;color:#5a8a5a;max-width:440px;margin:0 auto 32px;line-height:1.7;}
+footer{padding:48px 24px 28px;border-top:1px solid rgba(0,166,81,.08);}
+.fg2{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;max-width:1100px;margin:0 auto 36px;}
+@media(max-width:680px){.fg2{grid-template-columns:1fr 1fr;}}
+.fbn{font-size:16px;font-weight:900;color:#edfaed;margin-bottom:10px;}
+.fbn span{color:#00c461;}
+.fbd{font-size:13px;color:#3a5a3a;line-height:1.65;max-width:220px;}
+.fcol h4{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3a5a3a;margin-bottom:12px;}
+.fcol a{display:block;font-size:13px;color:#3a5a3a;text-decoration:none;margin-bottom:8px;transition:color .15s;}
+.fcol a:hover{color:#00c461;}
+.fbot{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:22px;border-top:1px solid rgba(0,166,81,.06);flex-wrap:wrap;gap:10px;}
+.fcp{font-size:12px;color:#3a5a3a;}
+.fcp span{color:#00a651;}
+.mpill{display:flex;align-items:center;gap:7px;background:#0d160d;border:1px solid rgba(0,166,81,.15);border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;color:#3a5a3a;}
+#sp{position:fixed;top:64px;left:0;height:2px;background:#00a651;z-index:99;width:0%;transition:width .1s linear;}
+</style>
+</head>
+<body>
+
+<div id="sp"></div>
+
+<nav>
+  <div class="nlogo">&#128242;</div>
+  <div class="nbrand">Pesa <span>Yangu</span></div>
+  <div class="nlinks">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="nright">
+    <a class="nghost" href="app.html">Login</a>
+    <a class="nprime" href="app.html">Start Free</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hbadge"><span class="pulse"></span>Built for Kenya &#127472;&#127466;</div>
+  <h1>
+    <span class="l1">Track Every Shilling.</span>
+    <span class="l2">Grow Your Pesa.</span>
+  </h1>
+  <p class="hsub">Kenya's smartest M-Pesa budget tracker. Built for Wanjiku, Kamau, and every Kenyan who wants to know where their money goes.</p>
+  <div class="hbtns">
+    <a class="hbtn1" href="app.html">&#9889; Start Tracking Free</a>
+    <a class="hbtn2" href="#features">See Features &#8594;</a>
+  </div>
+  <div class="trow">
+    <div class="tpill">&#128242; M-Pesa Ready</div>
+    <div class="tpill">&#128274; Private &amp; Secure</div>
+    <div class="tpill">&#127479; KES Currency</div>
+    <div class="tpill">&#127881; Free to Start</div>
+    <div class="tpill">&#128247; No App Download</div>
+  </div>
+</section>
+
+<div class="mwrap">
+  <div class="mbox">
+    <div class="mtop">
+      <div class="mdots">
+        <span style="background:#ff5f57"></span>
+        <span style="background:#febc2e"></span>
+        <span style="background:#28c840"></span>
+      </div>
+      <div class="murl">pesayangu.co.ke/app</div>
+    </div>
+    <div class="mbody">
+      <div class="mc">
+        <div class="mlb">Total Income</div>
+        <div class="mv g">KES 85,000</div>
+        <div class="mbars">
+          <div class="mbar" style="height:55%"></div>
+          <div class="mbar" style="height:40%"></div>
+          <div class="mbar" style="height:70%"></div>
+          <div class="mbar hi" style="height:88%"></div>
+          <div class="mbar" style="height:60%"></div>
+          <div class="mbar" style="height:75%"></div>
+        </div>
+      </div>
+      <div class="mc">
+        <div class="mlb">Total Spent</div>
+        <div class="mv r">KES 52,300</div>
+        <div class="mbars">
+          <div class="mbar ri" style="height:50%"></div>
+          <div class="mbar ri" style="height:65%"></div>
+          <div class="mbar ri" style="height:38%"></div>
+          <div class="mbar ri hi" style="height:58%"></div>
+          <div class="mbar ri" style="height:45%"></div>
+          <div class="mbar ri" style="height:52%"></div>
+        </div>
+      </div>
+      <div class="mc">
+        <div class="mlb">Balance Saved</div>
+        <div class="mv a">KES 32,700</div>
+        <div class="mtxs">
+          <div class="mtx"><span class="mtn">&#127829; Food</span><span class="mta out">-8,400</span></div>
+          <div class="mtx"><span class="mtn">&#128652; Matatu</span><span class="mta out">-3,200</span></div>
+          <div class="mtx"><span class="mtn">&#128181; Salary</span><span class="mta in">+85,000</span></div>
+          <div class="mtx"><span class="mtn">&#127968; Rent</span><span class="mta out">-18,000</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="s" id="features">
+  <div style="text-align:center;">
+    <div class="slbl">Features</div>
+    <h2 class="sh2">Everything to manage your pesa</h2>
+    <p class="ssub" style="margin:0 auto;">Built for how Kenyans earn, spend and save every day.</p>
+  </div>
+  <div class="fg">
+    <div class="fc"><div class="fi">&#128242;</div><div class="ft">M-Pesa Transaction Tracking</div><div class="fd">Log all your M-Pesa sends, receives, Paybill, Till and Fuliza transactions.</div></div>
+    <div class="fc"><div class="fi">&#127829;</div><div class="ft">Kenyan Categories</div><div class="fd">Pre-built for Kenyan life — Mama Mboga, Matatu, Chama, NHIF, Bodaboda and more.</div></div>
+    <div class="fc"><div class="fi">&#128200;</div><div class="ft">Smart Budget Insights</div><div class="fd">See which category eats your salary, daily average spend and savings rate.</div></div>
+    <div class="fc"><div class="fi">&#129311;</div><div class="ft">Chama Savings Tracker</div><div class="fd">Track chama contributions and payouts separately from personal expenses.</div><span class="ftag">&#11088; Premium</span></div>
+    <div class="fc"><div class="fi">&#128206;</div><div class="ft">Monthly PDF Reports</div><div class="fd">Download a full budget report as PDF every month for your records or KRA.</div><span class="ftag">&#11088; Premium</span></div>
+    <div class="fc"><div class="fi">&#127919;</div><div class="ft">Savings Goals</div><div class="fd">Set goals for land deposit, school fees, phone — track progress monthly.</div><span class="ftag">&#11088; Premium</span></div>
+    <div class="fc"><div class="fi">&#128161;</div><div class="ft">Daily Money Tips</div><div class="fd">Tips made for Kenyan habits — avoiding Fuliza traps, SACCO benefits and more.</div></div>
+    <div class="fc"><div class="fi">&#128274;</div><div class="ft">100% Private</div><div class="fd">Your data stays on your device. We never see it, store it or share it.</div></div>
+    <div class="fc"><div class="fi">&#128247;</div><div class="ft">No App Download</div><div class="fd">Works in your browser on any phone. No storage space, no updates needed.</div></div>
+  </div>
+</section>
+
+<div class="hiw">
+  <div class="hiw-in">
+    <div class="slbl" style="display:block;text-align:center;">How it Works</div>
+    <h2 class="sh2" style="text-align:center;">Start in 3 simple steps</h2>
+    <div class="hiwg">
+      <div><div class="hiwnum">1</div><div class="hiwt">Create your account</div><div class="hiwd">Sign up free with your name and phone. No email or credit card needed.</div></div>
+      <div><div class="hiwnum">2</div><div class="hiwt">Log your transactions</div><div class="hiwd">Add M-Pesa income and expenses. Takes just 10 seconds per entry.</div></div>
+      <div><div class="hiwnum">3</div><div class="hiwt">See your money clearly</div><div class="hiwd">Get instant insights on spending, savings rate and where to cut back.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ps" id="pricing">
+  <div class="pin">
+    <div style="text-align:center;">
+      <div class="slbl">Pricing</div>
+      <h2 class="sh2">Simple, honest pricing</h2>
+      <p class="ssub" style="margin:0 auto;">Start free forever. Upgrade for more power.</p>
+    </div>
+    <div class="pg">
+      <div class="pc">
+        <div class="pplan">Free Plan</div>
+        <div class="pamt"><span class="cur">KES</span> 0</div>
+        <div class="pper">Forever free</div>
+        <div class="pdiv"></div>
+        <div class="pfts">
+          <div class="pft y"><span class="ptk">&#10003;</span>Up to 50 transactions/month</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>All spending categories</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Income vs expense summary</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Budget breakdown</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Daily money tips</div>
+          <div class="pft n"><span class="ptk">&#10007;</span>Monthly PDF reports</div>
+          <div class="pft n"><span class="ptk">&#10007;</span>Savings goals</div>
+          <div class="pft n"><span class="ptk">&#10007;</span>Unlimited transactions</div>
+        </div>
+        <a class="pbtn pbtn-f" href="app.html">Get Started Free</a>
+      </div>
+      <div class="pc hot">
+        <div class="pbadge">&#11088; Most Popular</div>
+        <div class="pplan">Premium Plan</div>
+        <div class="pamt"><span class="cur">KES</span> 199</div>
+        <div class="pper">per month &bull; Cancel anytime</div>
+        <div class="pdiv"></div>
+        <div class="pfts">
+          <div class="pft y"><span class="ptk">&#10003;</span><strong>Unlimited</strong> transactions</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Everything in Free</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Monthly PDF reports</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Savings goals tracker</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Export to CSV / Excel</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Budget limit alerts</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>Chama tracker</div>
+          <div class="pft y"><span class="ptk">&#10003;</span>WhatsApp support</div>
+        </div>
+        <a class="pbtn pbtn-p" href="app.html#upgrade">&#128242; Pay with M-Pesa</a>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:#3a5a3a;margin-top:14px;">&#128274; Secure M-Pesa payment &bull; Cancel anytime &bull; No hidden charges</p>
+  </div>
+</div>
+
+<div class="ts">
+  <div class="tin">
+    <div style="text-align:center;">
+      <div class="slbl">Testimonials</div>
+      <h2 class="sh2">Kenyans love Pesa Yangu</h2>
+    </div>
+    <div class="tg">
+      <div class="tc"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="tq">"Nilianza kutumia Pesa Yangu mwezi mmoja uliopita. Sasa ninajua pesa yangu inaenda wapi. Nimeweza kuokoa KES 8,000 zaidi kila mwezi!"</div><div class="ta"><div class="tav" style="background:#059669;">W</div><div><div class="tan">Wanjiru M.</div><div class="tar">Teacher, Nakuru</div></div></div></div>
+      <div class="tc"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="tq">"As a bodaboda operator I never knew how much I spent on Fuliza. This app showed me — now I save KES 3,200 extra every month."</div><div class="ta"><div class="tav" style="background:#2563eb;">K</div><div><div class="tan">Kamau J.</div><div class="tar">Bodaboda Operator, Nairobi</div></div></div></div>
+      <div class="tc"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="tq">"I use the Chama tracker for our group of 15 women. The PDF report feature is a game changer — we send it to all members every month end."</div><div class="ta"><div class="tav" style="background:#7c3aed;">A</div><div><div class="tan">Achieng O.</div><div class="tar">Chama Chairlady, Kisumu</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="fqs" id="faq">
+  <div class="fqi">
+    <div style="text-align:center;">
+      <div class="slbl">FAQ</div>
+      <h2 class="sh2">Frequently asked questions</h2>
+    </div>
+    <div class="fql">
+      <div class="fqitem"><button class="fqq" onclick="tfq(this)" type="button">Is my M-Pesa data safe?<span class="fqarr">&#8964;</span></button><div class="fqa">Yes, completely. Pesa Yangu does NOT connect to your M-Pesa account. You manually enter transactions. All data stays on your device only — we never see it or store it on any server.</div></div>
+      <div class="fqitem"><button class="fqq" onclick="tfq(this)" type="button">How do I pay for Premium?<span class="fqarr">&#8964;</span></button><div class="fqa">You pay KES 199/month via M-Pesa. Click Pay with M-Pesa, enter your number and receive an STK Push on your phone. Confirm with your PIN and Premium activates instantly.</div></div>
+      <div class="fqitem"><button class="fqq" onclick="tfq(this)" type="button">Can I cancel Premium anytime?<span class="fqarr">&#8964;</span></button><div class="fqa">Yes. Cancel anytime from account settings. You keep Premium until end of your paid month. No cancellation fees, no questions asked.</div></div>
+      <div class="fqitem"><button class="fqq" onclick="tfq(this)" type="button">Do I need to download an app?<span class="fqarr">&#8964;</span></button><div class="fqa">No! Pesa Yangu works in your browser. Open it on Chrome or Safari and add it to your home screen — it looks and feels like an app with zero storage used.</div></div>
+      <div class="fqitem"><button class="fqq" onclick="tfq(this)" type="button">Does it work offline?<span class="fqarr">&#8964;</span></button><div class="fqa">Yes! Once loaded the app works fully offline. Your data is saved on your device. You only need internet to load it the first time or upgrade to Premium.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ctas">
+  <div class="ctabox">
+    <h2>Take control of your pesa today &#127881;</h2>
+    <p>Join thousands of Kenyans who know where their money goes and save more every month.</p>
+    <a class="hbtn1" href="app.html" style="margin:0 auto;width:fit-content;">&#9889; Start Free — No Card Needed</a>
+  </div>
+</div>
+
+<footer>
+  <div class="fg2">
+    <div><div class="fbn">Pesa <span>Yangu</span></div><div class="fbd">Kenya's #1 M-Pesa budget tracker. Built with love for every Kenyan.</div></div>
+    <div class="fcol"><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="app.html">Launch App</a><a href="#faq">FAQ</a></div>
+    <div class="fcol"><h4>Company</h4><a href="#">About Us</a><a href="#">Blog</a><a href="#">Contact</a></div>
+    <div class="fcol"><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+  </div>
+  <div class="fbot">
+    <div class="fcp">&#169; 2026 <span>Pesa Yangu</span>. Made in Kenya &#127472;&#127466;</div>
+    <div class="mpill">&#128242; M-Pesa Accepted</div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+window.addEventListener('scroll', function() {
+  var bar = document.getElementById('sp');
+  if (!bar) return;
+  var pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  bar.style.width = pct + '%';
+});
+function tfq(btn) {
+  var item = btn.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>
