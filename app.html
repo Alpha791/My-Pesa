@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Pesa Yangu App — Track your M-Pesa budget, income and expenses."/>
+<title>Pesa Yangu | App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#f0f4f0;color:#0a1a0a;font-family:'Sora',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* AUTH */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#060e06,#0d1f0d,#0a1a0a);padding:20px;}
+.acard{background:#111a11;border:1px solid rgba(0,166,81,.15);border-radius:22px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);}
+.atop{background:linear-gradient(135deg,#0d2b0d,#122b12);padding:30px 28px 22px;text-align:center;border-bottom:1px solid rgba(0,166,81,.1);}
+.alogo{width:52px;height:52px;background:#00a651;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;box-shadow:0 0 24px rgba(0,166,81,.35);}
+.atop h2{font-size:21px;font-weight:800;color:#edfaed;letter-spacing:-.02em;margin-bottom:3px;}
+.atop p{font-size:12.5px;color:#4a7a4a;}
+.abody{padding:26px 28px 28px;}
+.atabs{display:flex;background:rgba(255,255,255,.05);border-radius:9px;padding:4px;margin-bottom:20px;}
+.atab{flex:1;padding:9px;border:none;border-radius:7px;background:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;color:#4a7a4a;transition:all .2s;}
+.atab.on{background:#00a651;color:#fff;box-shadow:0 2px 10px rgba(0,166,81,.3);}
+.aerr{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#fca5a5;border-radius:8px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:14px;display:none;}
+.afield{margin-bottom:13px;}
+.albl{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a7a4a;margin-bottom:5px;}
+.ainp{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(0,166,81,.15);border-radius:8px;padding:11px 12px;color:#edfaed;font-family:'Sora',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.ainp:focus{border-color:#00a651;box-shadow:0 0 0 3px rgba(0,166,81,.1);}
+.ainp::placeholder{color:#3a5a3a;}
+.abtn{width:100%;padding:13px;background:#00a651;color:#fff;border:none;border-radius:9px;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px;}
+.abtn:hover{background:#00c461;transform:translateY(-1px);}
+.aback{display:flex;justify-content:center;margin-top:14px;font-size:12px;color:#3a5a3a;}
+.aback a{color:#00c461;text-decoration:none;font-weight:700;margin-left:4px;}
+.ahome{display:flex;justify-content:center;margin-top:12px;}
+.ahome a{font-size:12px;color:#3a5a3a;text-decoration:none;}
+
+/* APP */
+#appwrap{display:none;flex-direction:column;min-height:100vh;}
+#topbar{background:#fff;border-bottom:1px solid #dce8dc;height:56px;display:flex;align-items:center;padding:0 16px;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,60,10,.07);}
+.tlogo{width:30px;height:30px;background:#00a651;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.tbrand{font-size:15px;font-weight:800;color:#0a1a0a;}
+.tbrand span{color:#00a651;}
+.tright{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.tpbadge{display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#713f12;border-radius:100px;padding:4px 10px;font-size:10.5px;font-weight:800;}
+.tfbadge{background:#f0f4f0;border:1px solid #dce8dc;color:#5a7a5a;border-radius:100px;padding:4px 10px;font-size:10.5px;font-weight:700;cursor:pointer;transition:all .2s;}
+.tfbadge:hover{border-color:#00a651;color:#007a3d;}
+.tav{width:28px;height:28px;border-radius:50%;background:#00a651;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;}
+.tlout{padding:5px 11px;background:none;border:1px solid #dce8dc;border-radius:7px;color:#5a7a5a;cursor:pointer;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;transition:all .2s;}
+.tlout:hover{border-color:#dc2626;color:#dc2626;}
+
+/* MAIN */
+#appmain{max-width:1080px;margin:0 auto;padding:18px 14px 60px;width:100%;}
+
+/* SUMMARY */
+.sumrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+@media(max-width:560px){.sumrow{grid-template-columns:1fr;}}
+.scard{background:#fff;border:1px solid #dce8dc;border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,60,10,.07);position:relative;overflow:hidden;}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.scard.i::before{background:#00a651;}
+.scard.e::before{background:#dc2626;}
+.scard.b::before{background:#d97706;}
+.slb{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5a7a5a;margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.sd{width:6px;height:6px;border-radius:50%;}
+.sv{font-size:clamp(18px,4vw,26px);font-weight:800;font-family:'DM Mono',monospace;letter-spacing:-.02em;line-height:1;margin-bottom:3px;}
+.scard.i .sv{color:#007a3d;}
+.scard.e .sv{color:#dc2626;}
+.scard.b .sv{color:#0a1a0a;}
+.ss{font-size:11px;color:#5a7a5a;}
+
+/* INSIGHTS */
+.insrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+@media(max-width:680px){.insrow{grid-template-columns:1fr 1fr;}}
+.ic{background:#fff;border:1px solid #dce8dc;border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,60,10,.06);}
+.il{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8aaa8a;margin-bottom:3px;}
+.iv{font-size:15px;font-weight:800;font-family:'DM Mono',monospace;color:#0a1a0a;}
+.iv.g{color:#007a3d;}.iv.r{color:#dc2626;}
+
+/* GRID */
+.mg{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start;}
+@media(max-width:800px){.mg{grid-template-columns:1fr;}}
+
+/* CARD */
+.card{background:#fff;border:1px solid #dce8dc;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,60,10,.07);}
+.ch{padding:14px 16px;border-bottom:1px solid #dce8dc;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ct{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;}
+.ci{width:26px;height:26px;border-radius:7px;background:rgba(0,166,81,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.cb{padding:16px;}
+
+/* FORM */
+.ftabs{display:flex;background:#f7fbf7;border-radius:8px;padding:3px;margin-bottom:14px;border:1px solid #dce8dc;}
+.ftab{flex:1;padding:8px;border:none;border-radius:6px;background:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:#5a7a5a;transition:all .2s;}
+.ftab.on-i{background:#00a651;color:#fff;box-shadow:0 2px 8px rgba(0,166,81,.2);}
+.ftab.on-e{background:#dc2626;color:#fff;box-shadow:0 2px 8px rgba(220,38,38,.15);}
+.ff{margin-bottom:12px;}
+.fl{display:block;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#5a7a5a;margin-bottom:5px;}
+.fi2,.fs{width:100%;background:#f7fbf7;border:1.5px solid #dce8dc;border-radius:8px;padding:9px 11px;color:#0a1a0a;font-family:'Sora',sans-serif;font-size:13px;outline:none;transition:border-color .2s;appearance:none;}
+.fi2:focus,.fs:focus{border-color:#00a651;box-shadow:0 0 0 3px rgba(0,166,81,.08);}
+.fi2::placeholder{color:#8aaa8a;}
+.kw{position:relative;}
+.kp{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:10.5px;font-weight:700;color:#007a3d;pointer-events:none;}
+.ki{padding-left:38px;font-family:'DM Mono',monospace;font-weight:700;font-size:14px;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.badd{width:100%;padding:12px;background:#00a651;color:#fff;border:none;border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.badd:hover{background:#00c461;transform:translateY(-1px);}
+.badd.em{background:#dc2626;}
+.badd.em:hover{background:#b91c1c;}
+.limwarn{background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 12px;font-size:12px;color:#92400e;font-weight:600;margin-top:9px;display:none;text-align:center;}
+
+/* FILTERS */
+.frow{display:flex;gap:5px;padding:11px 14px 0;overflow-x:auto;scrollbar-width:none;}
+.frow::-webkit-scrollbar{display:none;}
+.chip{padding:5px 11px;border-radius:100px;border:1.5px solid #dce8dc;background:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:#5a7a5a;white-space:nowrap;transition:all .15s;}
+.chip:hover{border-color:#00a651;color:#007a3d;}
+.chip.on{background:#00a651;border-color:#00a651;color:#fff;}
+
+/* TX LIST */
+#txwrap{padding:5px 6px 10px;}
+.txempty{text-align:center;padding:36px 20px;color:#8aaa8a;}
+.txemico{font-size:38px;margin-bottom:8px;opacity:.4;}
+.txsep{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8aaa8a;padding:9px 14px 3px;}
+.txi{display:flex;align-items:center;gap:10px;padding:10px 14px;transition:background .15s;border-radius:8px;margin:0 2px;}
+.txi:hover{background:#f7fbf7;}
+.txic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.txin{flex:1;min-width:0;}
+.txd{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.txm{font-size:11px;color:#5a7a5a;display:flex;align-items:center;gap:6px;margin-top:1px;flex-wrap:wrap;}
+.txtag{background:#f0f4f0;border:1px solid #dce8dc;border-radius:100px;padding:1px 7px;font-size:9.5px;font-weight:700;}
+.txa{font-family:'DM Mono',monospace;font-size:13px;font-weight:800;flex-shrink:0;}
+.txa.in{color:#007a3d;}.txa.out{color:#dc2626;}
+.txdel{background:none;border:none;color:#8aaa8a;cursor:pointer;font-size:13px;padding:4px;border-radius:6px;transition:all .15s;opacity:0;}
+.txi:hover .txdel{opacity:1;}
+.txdel:hover{background:#fef2f2;color:#dc2626;}
+
+/* BUDGET BARS */
+.blist{display:flex;flex-direction:column;gap:9px;}
+.bi{background:#f7fbf7;border:1px solid #dce8dc;border-radius:9px;padding:11px 13px;}
+.bitop{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.bcat{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;}
+.bico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.bright{text-align:right;font-size:11px;color:#5a7a5a;font-family:'DM Mono',monospace;}
+.bright strong{display:block;font-size:12.5px;color:#0a1a0a;}
+.pt{height:5px;background:#f0f4f0;border-radius:100px;overflow:hidden;}
+.pf{height:100%;border-radius:100px;background:#00a651;transition:width .5s ease;}
+.pf.w{background:#d97706;}.pf.d{background:#dc2626;}
+
+/* TIPS */
+.tipcard{background:#fff;border:1px solid #dce8dc;border-radius:12px;padding:14px 16px;margin-top:14px;}
+.tiplb{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5a7a5a;margin-bottom:7px;}
+.tiptx{font-size:13px;color:#5a7a5a;line-height:1.65;}
+
+/* UPGRADE BOX */
+.upbox{background:linear-gradient(135deg,#0d2b0d,#122b12);border:1.5px solid rgba(0,166,81,.3);border-radius:13px;padding:18px;text-align:center;margin-top:14px;}
+.upbox h4{font-size:15px;font-weight:800;color:#edfaed;margin-bottom:5px;}
+.upbox p{font-size:12px;color:#4a7a4a;margin-bottom:13px;line-height:1.6;}
+.upbtn{width:100%;padding:12px;background:#00a651;color:#fff;border:none;border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.upbtn:hover{background:#00c461;}
+
+/* GOALS LOCK */
+.glock{background:#fffbeb;border:1px dashed #fcd34d;border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;}
+.glock:hover{background:#fef3c7;}
+.glico{font-size:26px;margin-bottom:7px;}
+.glt{font-size:13px;font-weight:700;color:#92400e;margin-bottom:3px;}
+.gls{font-size:12px;color:#b45309;}
+
+/* MODAL */
+.movl{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+.movl.op{display:flex;}
+.mbox{background:#fff;border-radius:20px;width:100%;max-width:440px;box-shadow:0 30px 80px rgba(0,0,0,.3);overflow:hidden;}
+.mhdr{padding:20px 22px;border-bottom:1px solid #dce8dc;display:flex;align-items:center;justify-content:space-between;}
+.mhdr h3{font-size:16px;font-weight:800;}
+.mclose{background:none;border:none;font-size:20px;color:#5a7a5a;cursor:pointer;border-radius:6px;padding:4px;transition:background .15s;}
+.mclose:hover{background:#f0f4f0;}
+.mbdy{padding:22px;}
+.mpform{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:13px;padding:18px;margin-bottom:16px;}
+.mptit{font-size:14px;font-weight:800;color:#166534;margin-bottom:3px;display:flex;align-items:center;gap:7px;}
+.mpsub{font-size:12px;color:#16a34a;margin-bottom:12px;}
+.mpamt{background:#fff;border:1.5px solid #86efac;border-radius:9px;padding:12px 14px;text-align:center;margin-bottom:12px;}
+.mpamt-l{font-size:10.5px;color:#16a34a;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:3px;}
+.mpamt-v{font-size:26px;font-weight:900;color:#15803d;font-family:'DM Mono',monospace;}
+.mpinw{position:relative;margin-bottom:11px;}
+.mppfx{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:#16a34a;}
+.mpinp{width:100%;background:#fff;border:1.5px solid #86efac;border-radius:8px;padding:10px 11px 10px 34px;font-family:'Sora',sans-serif;font-size:14px;color:#0a1a0a;outline:none;transition:border-color .2s;}
+.mpinp:focus{border-color:#00a651;}
+.mpinp::placeholder{color:#86efac;}
+.mpbtn{width:100%;padding:12px;background:#00a651;color:#fff;border:none;border-radius:9px;font-family:'Sora',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.mpbtn:hover{background:#00c461;}
+.perkl{display:flex;flex-direction:column;gap:8px;}
+.perk{display:flex;align-items:center;gap:9px;font-size:13px;color:#5a7a5a;}
+.perk .tk{color:#00a651;font-weight:800;}
+.stk-load{display:none;text-align:center;padding:22px;}
+.stksp{width:38px;height:38px;border:3px solid #dce8dc;border-top-color:#00a651;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.stk-ok{display:none;text-align:center;padding:18px;}
+.stk-ok-ico{font-size:48px;margin-bottom:10px;}
+.stk-ok h4{font-size:16px;font-weight:800;margin-bottom:5px;}
+.stk-ok p{font-size:13px;color:#5a7a5a;}
+.actbtn{width:100%;padding:12px;background:#00a651;color:#fff;border:none;border-radius:9px;font-family:'Sora',sans-serif;font-size:14px;font-weight:800;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:7px;}
+.actbtn:hover{background:#00c461;}
+
+/* TOAST */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#0a1a0a;color:#fff;padding:11px 22px;border-radius:100px;font-size:13px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;}
+#toast.on{transform:translateX(-50%) translateY(0);}
+.srow{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.stit{font-size:14px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth">
+  <div class="acard">
+    <div class="atop">
+      <div class="alogo">&#128242;</div>
+      <h2>Pesa Yangu</h2>
+      <p>Kenya M-Pesa Budget Tracker</p>
+    </div>
+    <div class="abody">
+      <div class="atabs">
+        <button class="atab on" id="at-li" onclick="atab('li')" type="button">Sign In</button>
+        <button class="atab" id="at-su" onclick="atab('su')" type="button">Create Account</button>
+      </div>
+      <div id="aerr" class="aerr"></div>
+      <!-- LOGIN -->
+      <div id="liform">
+        <div class="afield"><label class="albl">Phone Number</label><input class="ainp" type="tel" id="liph" placeholder="07XX XXX XXX"/></div>
+        <div class="afield"><label class="albl">Password</label><input class="ainp" type="password" id="lipw" placeholder="Enter password"/></div>
+        <button class="abtn" onclick="doLogin()" type="button">&#9889; Sign In</button>
+        <div class="aback">No account? <a href="#" onclick="atab('su');return false;">Create one free</a></div>
+      </div>
+      <!-- SIGNUP -->
+      <div id="suform" style="display:none;">
+        <div class="afield"><label class="albl">Full Name</label><input class="ainp" type="text" id="sunm" placeholder="e.g. Jane Kamau"/></div>
+        <div class="afield"><label class="albl">Phone Number (M-Pesa)</label><input class="ainp" type="tel" id="suph" placeholder="07XX XXX XXX"/></div>
+        <div class="afield"><label class="albl">Create Password</label><input class="ainp" type="password" id="supw" placeholder="At least 6 characters"/></div>
+        <button class="abtn" onclick="doSignup()" type="button">&#127881; Create Free Account</button>
+        <div class="aback">Have account? <a href="#" onclick="atab('li');return false;">Sign in</a></div>
+      </div>
+      <div class="ahome"><a href="index.html">&#8592; Back to home</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appwrap" style="display:none;flex-direction:column;min-height:100vh;">
+  <div id="topbar">
+    <div class="tlogo">&#128242;</div>
+    <div class="tbrand">Pesa <span>Yangu</span></div>
+    <div class="tright">
+      <div id="planbadge"></div>
+      <div class="tav" id="tavatar">?</div>
+      <button class="tlout" onclick="doLogout()" type="button">Logout</button>
+    </div>
+  </div>
+  <div id="appmain"></div>
+</div>
+
+<!-- UPGRADE MODAL -->
+<div class="movl" id="modal">
+  <div class="mbox">
+    <div class="mhdr">
+      <h3>&#11088; Upgrade to Premium</h3>
+      <button class="mclose" onclick="closeModal()" type="button">&#x2715;</button>
+    </div>
+    <div class="mbdy">
+      <div id="mstep1">
+        <div class="mpform">
+          <div class="mptit">&#128242; Pay via M-Pesa</div>
+          <div class="mpsub">You will receive an STK Push on your phone</div>
+          <div class="mpamt"><div class="mpamt-l">Monthly Subscription</div><div class="mpamt-v">KES 199</div></div>
+          <div class="mpinw"><span class="mppfx">&#128242;</span><input class="mpinp" type="tel" id="mphone" placeholder="07XX XXX XXX"/></div>
+          <button class="mpbtn" onclick="startPay()" type="button">&#128242; Send STK Push</button>
+        </div>
+        <div class="perkl">
+          <div class="perk"><span class="tk">&#10003;</span> Unlimited transactions (Free = 50/month)</div>
+          <div class="perk"><span class="tk">&#10003;</span> Monthly PDF reports</div>
+          <div class="perk"><span class="tk">&#10003;</span> Savings goals tracker</div>
+          <div class="perk"><span class="tk">&#10003;</span> Export to CSV / Excel</div>
+          <div class="perk"><span class="tk">&#10003;</span> Budget limit alerts</div>
+          <div class="perk"><span class="tk">&#10003;</span> WhatsApp support</div>
+        </div>
+      </div>
+      <div class="stk-load" id="mload">
+        <div class="stksp"></div>
+        <div style="font-size:14px;font-weight:700;color:#0a1a0a;">Sending STK Push...</div>
+        <div style="font-size:12px;color:#5a7a5a;margin-top:6px;">Check your phone and enter your M-Pesa PIN</div>
+      </div>
+      <div class="stk-ok" id="mok">
+        <div class="stk-ok-ico">&#127881;</div>
+        <h4>Payment Successful!</h4>
+        <p>Welcome to Pesa Yangu Premium! All features are now unlocked.</p>
+        <button class="actbtn" onclick="activatePremium()" type="button">&#9889; Start Using Premium</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+/* ── CATEGORIES ── */
+var INC = [
+  {n:'Salary',i:'&#128181;',c:'#dcfce7'},
+  {n:'Business',i:'&#127981;',c:'#dcfce7'},
+  {n:'Freelance',i:'&#128187;',c:'#dbeafe'},
+  {n:'M-Pesa Received',i:'&#128242;',c:'#dcfce7'},
+  {n:'Chama Payout',i:'&#129309;',c:'#fef9c3'},
+  {n:'Side Hustle',i:'&#128293;',c:'#fce7f3'},
+  {n:'Farming',i:'&#127807;',c:'#dcfce7'},
+  {n:'Other Income',i:'&#128176;',c:'#f3f4f6'},
+];
+var EXP = [
+  {n:'Food & Groceries',i:'&#127829;',c:'#fef3c7'},
+  {n:'Transport/Matatu',i:'&#128652;',c:'#dbeafe'},
+  {n:'Rent',i:'&#127968;',c:'#f3e8ff'},
+  {n:'Airtime/Data',i:'&#128241;',c:'#dcfce7'},
+  {n:'Utilities',i:'&#128161;',c:'#fef9c3'},
+  {n:'Chama',i:'&#129309;',c:'#fce7f3'},
+  {n:'School Fees',i:'&#127979;',c:'#dbeafe'},
+  {n:'Shopping',i:'&#128717;',c:'#fce7f3'},
+  {n:'Health/NHIF',i:'&#128138;',c:'#fee2e2'},
+  {n:'Savings/SACCO',i:'&#129555;',c:'#dcfce7'},
+  {n:'Entertainment',i:'&#127926;',c:'#fef3c7'},
+  {n:'Fuliza/Loan',i:'&#128203;',c:'#fee2e2'},
+  {n:'Family Support',i:'&#128106;',c:'#f0fdf4'},
+  {n:'Bodaboda',i:'&#128690;',c:'#fef3c7'},
+  {n:'Other',i:'&#127991;',c:'#f3f4f6'},
+];
+var TIPS = [
+  '&#128161; Save at least 10% of every M-Pesa deposit before spending.',
+  '&#127942; Stay consistent with your chama contributions — it compounds!',
+  '&#128242; Request your M-Pesa statement monthly to verify transactions.',
+  '&#127981; Avoid Fuliza for daily expenses — interest adds up fast!',
+  '&#129309; A 3-month emergency fund is your best financial protection.',
+  '&#127968; Your rent should not exceed 30% of your monthly income.',
+  '&#128244; SACCO loans are cheaper than bank loans — use them wisely.',
+  '&#128293; Track side hustle income separately for easier KRA filing.',
+];
+var FREE_LIMIT = 50;
+
+/* ── STATE ── */
+var DB = {users:[], txs:[]};
+var ME = null;
+var FILTER = 'all';
+var MODE = 'income';
+var TTM = null;
+
+/* ── BOOT ── */
+window.addEventListener('DOMContentLoaded', function() {
+  try { var r = localStorage.getItem('py-v4'); if (r) DB = JSON.parse(r); } catch(e) {}
+  if (!DB.users) DB.users = [];
+  if (!DB.txs)   DB.txs   = [];
+  // Check hash
+  if (window.location.hash === '#signup') atab('su');
+  // Auto-login
+  try {
+    var sid = localStorage.getItem('py-ses');
+    if (sid) {
+      var found = null;
+      for (var i = 0; i < DB.users.length; i++) { if (DB.users[i].id === sid) { found = DB.users[i]; break; } }
+      if (found) { ME = found; goApp(); return; }
+    }
+  } catch(e) {}
+  // Show auth
+  document.getElementById('auth').style.display = 'flex';
+});
+
+function sdb() { try { localStorage.setItem('py-v4', JSON.stringify(DB)); } catch(e) {} }
+function ses() { try { localStorage.setItem('py-ses', ME ? ME.id : ''); } catch(e) {} }
+function ge(id) { return document.getElementById(id); }
+function gv(id) { var el = ge(id); return el ? el.value.trim() : ''; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ── AUTH ── */
+function atab(t) {
+  ge('aerr').style.display = 'none';
+  ge('liform').style.display  = t === 'li' ? 'block' : 'none';
+  ge('suform').style.display  = t === 'su' ? 'block' : 'none';
+  ge('at-li').className = 'atab' + (t === 'li' ? ' on' : '');
+  ge('at-su').className = 'atab' + (t === 'su' ? ' on' : '');
+}
+function aerr(m) { var e = ge('aerr'); e.textContent = m; e.style.display = 'block'; }
+
+function doLogin() {
+  var ph = gv('liph'), pw = gv('lipw');
+  if (!ph || !pw) { aerr('Please enter phone and password.'); return; }
+  var u = null;
+  for (var i = 0; i < DB.users.length; i++) { if (DB.users[i].phone === ph && DB.users[i].pass === pw) { u = DB.users[i]; break; } }
+  if (!u) { aerr('Incorrect phone or password.'); return; }
+  ME = u; ses(); goApp();
+}
+
+function doSignup() {
+  var nm = gv('sunm'), ph = gv('suph'), pw = gv('supw');
+  if (!nm) { aerr('Please enter your name.'); return; }
+  if (!ph || ph.length < 9) { aerr('Enter a valid phone number.'); return; }
+  if (!pw || pw.length < 6) { aerr('Password must be at least 6 characters.'); return; }
+  for (var i = 0; i < DB.users.length; i++) { if (DB.users[i].phone === ph) { aerr('This phone is already registered.'); return; } }
+  var u = {id:'u-'+Date.now(), name:nm, phone:ph, pass:pw, plan:'free', joined:new Date().toISOString().split('T')[0], puntil:null};
+  DB.users.push(u); sdb();
+  ME = u; ses(); goApp();
+  toast('&#127881; Welcome to Pesa Yangu, ' + nm.split(' ')[0] + '!');
+}
+
+function doLogout() {
+  ME = null;
+  try { localStorage.removeItem('py-ses'); } catch(e) {}
+  ge('appwrap').style.display = 'none';
+  ge('auth').style.display = 'flex';
+}
+
+function goApp() {
+  ge('auth').style.display = 'none';
+  ge('appwrap').style.display = 'flex';
+  ge('tavatar').textContent = ME.name.charAt(0).toUpperCase();
+  var badge = '';
+  if (isPrem()) {
+    badge = '<div class="tpbadge">&#11088; Premium</div>';
+  } else {
+    badge = '<div class="tfbadge" onclick="openModal()">&#8679; Upgrade</div>';
+  }
+  ge('planbadge').innerHTML = badge;
+  render();
+  if (window.location.hash === '#upgrade') { setTimeout(openModal, 400); }
+}
+
+/* ── HELPERS ── */
+function isPrem() {
+  if (!ME || ME.plan !== 'premium') return false;
+  if (ME.puntil && new Date(ME.puntil) < new Date()) return false;
+  return true;
+}
+function myTxs() {
+  var out = [];
+  for (var i = 0; i < DB.txs.length; i++) { if (DB.txs[i].uid === ME.id) out.push(DB.txs[i]); }
+  return out;
+}
+function canAdd() { return isPrem() || myTxs().length < FREE_LIMIT; }
+function fmt(n) { return 'KES ' + Number(n||0).toLocaleString('en-KE', {minimumFractionDigits:0}); }
+function getCat(name, type) {
+  var list = type === 'income' ? INC : EXP;
+  for (var i = 0; i < list.length; i++) { if (list[i].n === name) return list[i]; }
+  return {n:name, i:'&#128176;', c:'#f3f4f6'};
+}
+function dlabel(ds) {
+  var td = new Date().toISOString().split('T')[0];
+  var yd = new Date(Date.now()-86400000).toISOString().split('T')[0];
+  if (ds === td) return 'Today';
+  if (ds === yd) return 'Yesterday';
+  var d = new Date(ds+'T00:00:00');
+  var M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getDate() + ' ' + M[d.getMonth()];
+}
+
+var _tt = null;
+function toast(m) {
+  var t = ge('toast'); t.innerHTML = m; t.classList.add('on');
+  if (_tt) clearTimeout(_tt);
+  _tt = setTimeout(function() { t.classList.remove('on'); }, 2500);
+}
+
+/* ── RENDER ── */
+function render() {
+  var txs = myTxs();
+  var inc = 0, exp = 0, inC = 0, exC = 0;
+  for (var i = 0; i < txs.length; i++) {
+    if (txs[i].type === 'income') { inc += txs[i].amt; inC++; }
+    else { exp += txs[i].amt; exC++; }
+  }
+  var bal = inc - exp;
+  var spct = inc > 0 ? Math.round((bal/inc)*100) : 0;
+  // biggest expense
+  var bigAmt = 0, bigName = '—';
+  for (var j = 0; j < txs.length; j++) { if (txs[j].type==='expense' && txs[j].amt > bigAmt) { bigAmt = txs[j].amt; bigName = txs[j].desc; } }
+  // daily avg
+  var dAvg = exp > 0 ? Math.round(exp/30) : 0;
+  // top category
+  var cTot = {}; var topC = '—', topA = 0;
+  for (var k = 0; k < txs.length; k++) {
+    if (txs[k].type==='expense') { if (!cTot[txs[k].cat]) cTot[txs[k].cat]=0; cTot[txs[k].cat]+=txs[k].amt; }
+  }
+  var ck = Object.keys(cTot);
+  for (var ci = 0; ci < ck.length; ci++) { if (cTot[ck[ci]] > topA) { topA = cTot[ck[ci]]; topC = ck[ci]; } }
+  // tip
+  var tip = TIPS[Math.abs(Math.floor(Date.now()/86400000)) % TIPS.length];
+  var td = new Date().toISOString().split('T')[0];
+  var used = txs.length;
+  var usedTxt = isPrem() ? 'Premium — Unlimited' : (used + '/' + FREE_LIMIT + ' transactions used');
+  // income cat options
+  var incOpts = '<option value="">-- Select Category --</option>';
+  for (var io = 0; io < INC.length; io++) incOpts += '<option value="' + esc(INC[io].n) + '">' + esc(INC[io].n) + '</option>';
+
+  var h = '';
+  h += '<div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">';
+  h += '<div><div style="font-size:18px;font-weight:800;letter-spacing:-.02em;">&#128075; Hey, ' + esc(ME.name.split(' ')[0]) + '!</div>';
+  h += '<div style="font-size:12px;color:#5a7a5a;margin-top:2px;">' + usedTxt + '</div></div>';
+  h += '<div style="display:flex;gap:7px;">';
+  if (isPrem()) h += '<button class="chip" onclick="exportCSV()" type="button">&#128190; CSV</button>';
+  h += '<button onclick="clearAll()" type="button" style="padding:6px 12px;background:none;border:1.5px solid #dc2626;border-radius:8px;color:#dc2626;font-family:Sora,sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;">&#128465; Clear</button>';
+  h += '</div></div>';
+
+  h += '<div class="sumrow">';
+  h += '<div class="scard i"><div class="slb"><span class="sd" style="background:#00a651"></span>Income</div><div class="sv">' + fmt(inc) + '</div><div class="ss">' + inC + ' transactions</div></div>';
+  h += '<div class="scard e"><div class="slb"><span class="sd" style="background:#dc2626"></span>Spent</div><div class="sv">' + fmt(exp) + '</div><div class="ss">' + exC + ' transactions</div></div>';
+  h += '<div class="scard b"><div class="slb"><span class="sd" style="background:#d97706"></span>Balance</div><div class="sv" style="color:' + (bal>=0?'#007a3d':'#dc2626') + '">' + fmt(bal) + '</div><div class="ss">' + spct + '% saved</div></div>';
+  h += '</div>';
+
+  h += '<div class="insrow">';
+  h += '<div class="ic"><div class="il">Biggest Expense</div><div class="iv r" style="font-size:12px;font-family:Sora,sans-serif;">' + esc(bigName) + '</div></div>';
+  h += '<div class="ic"><div class="il">Daily Avg Spend</div><div class="iv">' + fmt(dAvg) + '</div></div>';
+  h += '<div class="ic"><div class="il">Top Category</div><div class="iv g" style="font-size:12px;font-family:Sora,sans-serif;">' + esc(topC) + '</div></div>';
+  h += '<div class="ic"><div class="il">Transactions</div><div class="iv">' + used + '</div></div>';
+  h += '</div>';
+
+  h += '<div class="mg">';
+
+  // LEFT
+  h += '<div style="display:flex;flex-direction:column;gap:16px;">';
+
+  // Transactions card
+  h += '<div class="card">';
+  h += '<div class="ch"><div class="ct"><div class="ci">&#128203;</div>Transactions</div></div>';
+  h += '<div class="frow">';
+  h += '<button class="chip' + (FILTER==='all'?' on':'') + '" onclick="setFilter(\'all\',this)" type="button">All</button>';
+  h += '<button class="chip' + (FILTER==='income'?' on':'') + '" onclick="setFilter(\'income\',this)" type="button">Income</button>';
+  h += '<button class="chip' + (FILTER==='expense'?' on':'') + '" onclick="setFilter(\'expense\',this)" type="button">Expenses</button>';
+  h += '<button class="chip" onclick="setFilter(\'Food & Groceries\',this)" type="button">&#127829; Food</button>';
+  h += '<button class="chip" onclick="setFilter(\'Transport/Matatu\',this)" type="button">&#128652; Matatu</button>';
+  h += '<button class="chip" onclick="setFilter(\'Chama\',this)" type="button">&#129309; Chama</button>';
+  h += '<button class="chip" onclick="setFilter(\'Rent\',this)" type="button">&#127968; Rent</button>';
+  h += '</div>';
+  h += '<div id="txwrap"></div>';
+  h += '</div>';
+
+  // Budget breakdown
+  h += '<div class="card"><div class="ch"><div class="ct"><div class="ci">&#127919;</div>Budget Breakdown</div></div><div class="cb"><div class="blist">';
+  var ckeys = Object.keys(cTot).sort(function(a,b){return cTot[b]-cTot[a];});
+  if (ckeys.length === 0) {
+    h += '<div style="text-align:center;color:#8aaa8a;padding:18px;font-size:13px;">Add expenses to see breakdown</div>';
+  } else {
+    var te = exp || 1;
+    for (var bi = 0; bi < ckeys.length; bi++) {
+      var bn = ckeys[bi], ba = cTot[bn];
+      var bp = Math.round((ba/te)*100);
+      var binfo = getCat(bn, 'expense');
+      var bpc = bp > 60 ? 'd' : bp > 40 ? 'w' : '';
+      h += '<div class="bi"><div class="bitop"><div class="bcat"><div class="bico" style="background:' + binfo.c + '">' + binfo.i + '</div>' + esc(bn) + '</div><div class="bright"><strong>' + fmt(ba) + '</strong>' + bp + '%</div></div><div class="pt"><div class="pf ' + bpc + '" style="width:' + bp + '%"></div></div></div>';
+    }
+  }
+  h += '</div></div></div>';
+
+  // Savings goals
+  h += '<div class="card"><div class="ch"><div class="ct"><div class="ci">&#127919;</div>Savings Goals</div></div><div class="cb">';
+  if (isPrem()) {
+    var goals = ME.goals || [];
+    if (goals.length === 0) {
+      h += '<div style="text-align:center;color:#5a7a5a;font-size:13px;padding:10px;">No goals yet. <a href="#" onclick="addGoal();return false;" style="color:#00a651;font-weight:700;">Add one</a></div>';
+    } else {
+      for (var gi = 0; gi < goals.length; gi++) {
+        var g = goals[gi];
+        var gp = Math.min(100, Math.round((g.saved/g.target)*100));
+        h += '<div class="bi"><div class="bitop"><div class="bcat">' + esc(g.name) + '</div><div class="bright">' + gp + '%</div></div><div class="pt"><div class="pf" style="width:' + gp + '%;background:#2563eb"></div></div></div>';
+      }
+    }
+  } else {
+    h += '<div class="glock" onclick="openModal()"><div class="glico">&#127919;</div><div class="glt">&#11088; Premium Feature</div><div class="gls">Set saving goals for rent, school fees, land deposit... KES 199/month</div></div>';
+  }
+  h += '</div></div>';
+
+  h += '</div>'; // end left
+
+  // RIGHT — form
+  h += '<div style="display:flex;flex-direction:column;gap:14px;">';
+  h += '<div class="card"><div class="ch"><div class="ct"><div class="ci">&#10133;</div>Add Transaction</div></div><div class="cb">';
+  h += '<div class="ftabs">';
+  h += '<button class="ftab on-i" id="ft-i" onclick="setMode(\'income\')" type="button">&#8593; Money In</button>';
+  h += '<button class="ftab" id="ft-e" onclick="setMode(\'expense\')" type="button">&#8595; Money Out</button>';
+  h += '</div>';
+  h += '<div class="ff"><label class="fl">Description</label><input class="fi2" type="text" id="fdesc" placeholder="e.g. Salary, Mama Mboga..."/></div>';
+  h += '<div class="ff"><label class="fl">Amount (KES)</label><div class="kw"><span class="kp">KES</span><input class="fi2 ki" type="number" id="famt" placeholder="0" min="0" step="1"/></div></div>';
+  h += '<div class="r2">';
+  h += '<div class="ff"><label class="fl">Category</label><select class="fs" id="fcat">' + incOpts + '</select></div>';
+  h += '<div class="ff"><label class="fl">Date</label><input class="fi2" type="date" id="fdate" value="' + td + '"/></div>';
+  h += '</div>';
+  h += '<div class="ff"><label class="fl">M-Pesa Note (optional)</label><input class="fi2" type="text" id="fnote" placeholder="e.g. Till 123456..."/></div>';
+  h += '<button class="badd" id="btnadd" onclick="addTx()" type="button">&#43; Record Income</button>';
+  h += '<div class="limwarn" id="limwarn">&#9888; Free limit reached. <strong onclick="openModal()" style="cursor:pointer;">Upgrade KES 199</strong></div>';
+  h += '</div></div>';
+
+  // Tips
+  h += '<div class="tipcard"><div class="tiplb">&#128161; Money Tip</div><div class="tiptx">' + tip + '</div></div>';
+
+  // Upgrade CTA
+  if (!isPrem()) {
+    h += '<div class="upbox"><div style="font-size:28px;margin-bottom:7px;">&#11088;</div><h4>Upgrade to Premium</h4><p>Unlimited transactions, PDF reports, savings goals, CSV export &amp; more.</p><button class="upbtn" onclick="openModal()" type="button">&#128242; Pay KES 199/month</button></div>';
+  }
+
+  h += '</div>'; // end right
+  h += '</div>'; // end main-grid
+
+  ge('appmain').innerHTML = h;
+  setMode('income');
+  renderTxs();
+  updateLimWarn();
+}
+
+function setMode(m) {
+  MODE = m;
+  var cats = m === 'income' ? INC : EXP;
+  var sel = ge('fcat'); if (!sel) return;
+  sel.innerHTML = '<option value="">-- Select Category --</option>';
+  for (var i = 0; i < cats.length; i++) {
+    var o = document.createElement('option');
+    o.value = cats[i].n; o.textContent = cats[i].n; sel.appendChild(o);
+  }
+  var ti = ge('ft-i'), te = ge('ft-e'), btn = ge('btnadd');
+  if (!ti || !te || !btn) return;
+  if (m === 'income') {
+    ti.className = 'ftab on-i'; te.className = 'ftab';
+    btn.className = 'badd'; btn.innerHTML = '&#43; Record Income';
+  } else {
+    te.className = 'ftab on-e'; ti.className = 'ftab';
+    btn.className = 'badd em'; btn.innerHTML = '&#8595; Record Expense';
+  }
+  updateLimWarn();
+}
+
+function updateLimWarn() {
+  var w = ge('limwarn'); if (!w) return;
+  w.style.display = (!isPrem() && myTxs().length >= FREE_LIMIT) ? 'block' : 'none';
+}
+
+function setFilter(f, el) {
+  FILTER = f;
+  var chips = document.querySelectorAll('.chip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.remove('on');
+  if (el) el.classList.add('on');
+  renderTxs();
+}
+
+function renderTxs() {
+  var wrap = ge('txwrap'); if (!wrap) return;
+  var all = myTxs().filter(function(t) {
+    if (FILTER === 'all') return true;
+    if (FILTER === 'income') return t.type === 'income';
+    if (FILTER === 'expense') return t.type === 'expense';
+    return t.cat === FILTER;
+  });
+  all.sort(function(a,b) { return b.date.localeCompare(a.date) || b.id.localeCompare(a.id); });
+  if (all.length === 0) {
+    wrap.innerHTML = '<div class="txempty"><div class="txemico">&#128179;</div><p>No transactions found.</p></div>';
+    return;
+  }
+  var groups = {};
+  for (var i = 0; i < all.length; i++) {
+    var d = all[i].date; if (!groups[d]) groups[d] = []; groups[d].push(all[i]);
+  }
+  var dates = Object.keys(groups).sort(function(a,b){return b.localeCompare(a);});
+  var h = '';
+  for (var di = 0; di < dates.length; di++) {
+    h += '<div class="txsep">' + dlabel(dates[di]) + '</div>';
+    var dayT = groups[dates[di]];
+    for (var ti = 0; ti < dayT.length; ti++) {
+      var t = dayT[ti];
+      var cat = getCat(t.cat, t.type);
+      h += '<div class="txi">';
+      h += '<div class="txic" style="background:' + cat.c + '">' + cat.i + '</div>';
+      h += '<div class="txin"><div class="txd">' + esc(t.desc) + '</div>';
+      h += '<div class="txm"><span class="txtag">' + esc(t.cat) + '</span>' + (t.note ? '<span>' + esc(t.note) + '</span>' : '') + '</div></div>';
+      h += '<div class="txa ' + (t.type==='income'?'in':'out') + '">' + (t.type==='income'?'+':'-') + fmt(t.amt) + '</div>';
+      h += '<button class="txdel" onclick="delTx(\'' + t.id + '\')" type="button">&#128465;</button>';
+      h += '</div>';
+    }
+  }
+  wrap.innerHTML = h;
+}
+
+function addTx() {
+  if (!canAdd()) { openModal(); return; }
+  var desc = gv('fdesc'), amt = parseFloat(gv('famt')), cat = gv('fcat'), date = gv('fdate'), note = gv('fnote');
+  if (!desc) { toast('&#9888; Enter a description'); return; }
+  if (!amt || amt <= 0) { toast('&#9888; Enter a valid amount'); return; }
+  if (!cat) { toast('&#9888; Select a category'); return; }
+  if (!date) { toast('&#9888; Select a date'); return; }
+  var tx = {id:'tx-'+Date.now(), uid:ME.id, type:MODE, desc:desc, amt:amt, cat:cat, date:date, note:note};
+  DB.txs.push(tx); sdb();
+  ge('fdesc').value = ''; ge('famt').value = ''; ge('fcat').value = ''; ge('fnote').value = '';
+  toast(MODE==='income' ? '&#9989; Income recorded!' : '&#9989; Expense recorded!');
+  render();
+}
+
+function delTx(id) {
+  var newTxs = [];
+  for (var i = 0; i < DB.txs.length; i++) { if (DB.txs[i].id !== id) newTxs.push(DB.txs[i]); }
+  DB.txs = newTxs; sdb(); render(); toast('&#128465; Deleted');
+}
+
+function clearAll() {
+  if (!confirm('Clear all your transactions? This cannot be undone.')) return;
+  var newTxs = [];
+  for (var i = 0; i < DB.txs.length; i++) { if (DB.txs[i].uid !== ME.id) newTxs.push(DB.txs[i]); }
+  DB.txs = newTxs; sdb(); render(); toast('&#10004; All cleared');
+}
+
+function exportCSV() {
+  if (!isPrem()) { openModal(); return; }
+  var txs = myTxs();
+  var rows = ['Date,Type,Description,Category,Amount (KES),Note'];
+  for (var i = 0; i < txs.length; i++) {
+    var t = txs[i];
+    rows.push(t.date+','+t.type+','+t.desc.replace(/,/g,' ')+','+t.cat+','+t.amt+','+(t.note||''));
+  }
+  var blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pesa-yangu-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  toast('&#128190; CSV exported!');
+}
+
+function addGoal() {
+  var name = prompt('Goal name (e.g. "New Phone", "Land Deposit"):');
+  if (!name) return;
+  var target = parseFloat(prompt('Target amount in KES:'));
+  if (!target || target <= 0) return;
+  if (!ME.goals) ME.goals = [];
+  ME.goals.push({name:name, target:target, saved:0});
+  for (var i = 0; i < DB.users.length; i++) { if (DB.users[i].id === ME.id) { DB.users[i] = ME; break; } }
+  sdb(); render(); toast('&#127919; Goal added!');
+}
+
+/* ── MODAL ── */
+function openModal() {
+  ge('modal').classList.add('op');
+  ge('mstep1').style.display = 'block';
+  ge('mload').style.display = 'none';
+  ge('mok').style.display = 'none';
+  if (ME) ge('mphone').value = ME.phone || '';
+}
+function closeModal() { ge('modal').classList.remove('op'); }
+window.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+function startPay() {
+  var ph = ge('mphone').value.trim();
+  if (!ph || ph.length < 9) { toast('&#9888; Enter your M-Pesa phone number'); return; }
+  ge('mstep1').style.display = 'none';
+  ge('mload').style.display = 'block';
+  setTimeout(function() {
+    ge('mload').style.display = 'none';
+    ge('mok').style.display = 'block';
+  }, 3000);
+}
+
+function activatePremium() {
+  var until = new Date(); until.setDate(until.getDate() + 30);
+  ME.plan = 'premium'; ME.puntil = until.toISOString().split('T')[0];
+  for (var i = 0; i < DB.users.length; i++) { if (DB.users[i].id === ME.id) { DB.users[i] = ME; break; } }
+  sdb(); closeModal(); goApp();
+  toast('&#11088; Premium activated! Enjoy all features.');
+}
+</script>
+</body>
+</html>
